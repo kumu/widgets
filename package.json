@@ -1,7 +1,7 @@
 {
   "name": "kumu-widgets",
   "version": "0.0.1",
-  "repsository": "http://github.com/kumu/widgets",
+  "repository": "http://github.com/kumu/widgets",
   "main": "index.js",
   "dependencies": {
     "qs": "*",
