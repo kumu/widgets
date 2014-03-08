@@ -3,9 +3,9 @@ Widgets
 
 The official Kumu markdown widget collection.
 
-We've extended our [markdown library][marked] to support custom widgets
+We've extended the [marked][marked] markdown library to support custom widgets
 through a simple `[[widget]]` syntax.  Widgets are ridiculously easy to write
-and we'd love to accept pull requests for new ones. (See the contributing
+and we'd love to accept pull requests for new ones! (See the contributing
 guide at the bottom.)
 
 # Basics
@@ -15,7 +15,7 @@ are handled through named parameters, with optional parameters handled
 through the query string.
 
 ```
-[[the/widget/route/:id?foo=bar]]
+[[vimeo/:86389108?aspect=hd]]
 ```
 
 # Defining Widgets
@@ -52,10 +52,10 @@ module.exports = function(widgets) {
 
 # Contributing
 
-We'd love for you to add your own custom widgets.
+We'd love for you to add your own custom widgets. It's easy to get started:
 
-- Fork the project
-- Install dependencies `make install`
+- [Fork the project][fork]
+- Install dependencies `make install` (assumes [node][node] already installed)
 - Add your widget (see `test/widgets/vimeo` for example)
 - Add some tests
 - Submit a pull request
@@ -67,3 +67,5 @@ Run `make test` to run the test suite.
 
 [marked]: https://github.com/kumu/marked
 [templates]: http://underscorejs.org/#template
+[fork]: https://github.com/kumu/widgets/fork
+[node]: http://nodejs.org/
