@@ -15,7 +15,7 @@ are handled through named parameters, with optional parameters handled
 through the query string.
 
 ```
-[[vimeo/:86389108?aspect=hd]]
+[[vimeo/86389108?aspect=hd]]
 ```
 
 # Defining Widgets
