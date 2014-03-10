@@ -52,13 +52,27 @@ module.exports = function(widgets) {
 
 # Contributing
 
-We'd love for you to add your own custom widgets. It's easy to get started:
+We'd love for you to add your own custom widgets. It's easy to get started.
+
+```
+// Step 1. Make sure node / npm installed
+node --version
+npm --version
+
+// Step 2. Install mocha globally (for testing, may require sudo)
+npm install -g mocha
+```
+
+Basic process for adding new widgets:
 
 - [Fork the project][fork]
-- Install dependencies `make install` (assumes [node][node] already installed)
+- Create a feature branch `git checkout -b add-mywidget`
+- Install dependencies `make install`
 - Add your widget (see `test/widgets/vimeo` for example)
 - Add some tests
 - Submit a pull request
+
+Please limit each pull request to a single widget.
 
 # Testing
 
@@ -68,4 +82,3 @@ Run `make test` to run the test suite.
 [marked]: https://github.com/kumu/marked
 [templates]: http://underscorejs.org/#template
 [fork]: https://github.com/kumu/widgets/fork
-[node]: http://nodejs.org/
