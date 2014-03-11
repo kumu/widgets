@@ -10,11 +10,11 @@ describe("Youtube", function() {
 
     describe("aspect", function() {
       it("default [sd]", function() {
-        expect(render("youtube/123")).to.contain('data-aspect-ratio="sd"');
+        expect(render("youtube/123")).to.contain('data-aspect-ratio="hd"');
       });
 
       it("custom", function() {
-        expect(render("youtube/123?aspect=hd")).to.contain('data-aspect-ratio="hd"');
+        expect(render("youtube/123?aspect=other")).to.contain('data-aspect-ratio="other"');
       });
     });
   });
