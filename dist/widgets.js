@@ -181,7 +181,7 @@ utils.template = function(path) {
 
 module.exports = utils;
 
-},{"fs":10}],8:[function(_dereq_,module,exports){
+},{"fs":12}],8:[function(_dereq_,module,exports){
 //
 // // Anonymous widgets
 // module.exports = function(widgets) {
@@ -211,10 +211,43 @@ if (typeof window == "undefined") {
   // browser build
   // TODO: automate this
   _dereq_("./widgets/vimeo/vimeo")(helper);
+  _dereq_("./widgets/youtube/youtube")(helper);
+  _dereq_("./widgets/insightmaker/insightmaker")(helper);
 }
 
 
-},{"./registry":5,"./widgets/vimeo/vimeo":9,"glob":"R9Jafm"}],9:[function(_dereq_,module,exports){
+},{"./registry":5,"./widgets/insightmaker/insightmaker":9,"./widgets/vimeo/vimeo":10,"./widgets/youtube/youtube":11,"glob":"R9Jafm"}],9:[function(_dereq_,module,exports){
+//
+// Generates Insight Maker links that'll open within the lightbox.
+//
+// ```
+// [[insightmaker/:id]]
+// [[insightmaker/:id "link text"]]
+// ```
+//
+// If the link text is not given the url will be used instead.
+//
+//
+// Examples:
+//
+// ```
+// Include "Creating the Future" link to Insight Maker #8892
+// [[insightmaker/8892 "Creating the Future"]]
+// ```
+//
+function render(id, options) {
+  var url = "http://insightmaker.com/insight/" + id;
+  return this.template("insightmaker/insightmaker", {
+    href: url,
+    text: options.title || url
+  });
+}
+
+module.exports = function(widgets) {
+  widgets.add("insightmaker/:id", render);
+};
+
+},{}],10:[function(_dereq_,module,exports){
 //
 // The vimeo widget allows you to easily embed videos.
 //
@@ -236,7 +269,7 @@ if (typeof window == "undefined") {
 // ```
 //
 function render(id, options) {
-  return this.template("vimeo/vimeo", {
+  return this.template("fixed-iframe", {
     src: "//player.vimeo.com/video/" + id + "?title=0&byline=0&portrait=0",
     aspect: options.aspect
   });
@@ -246,12 +279,44 @@ module.exports = function(widgets) {
   widgets.add("vimeo/:id", render, {aspect: "hd"});
 };
 
-},{}],10:[function(_dereq_,module,exports){
+},{}],11:[function(_dereq_,module,exports){
+//
+// The youtube widget allows you to easily embed videos.
+//
+// ```
+// [[youtube/:id]]
+// ```
+//
+// Options:
+//
+// ```
+// aspect     desired aspect ratio [sd], hd
+// ```
+//
+// Examples:
+//
+// ```
+// Include video with id 1234 at 16x9 with autoplay
+// [[youtube/1234?aspect=16x9&autoplay=1]]
+// ```
+//
+function render(id, options) {
+  return this.template("fixed-iframe", {
+    src: "//www.youtube.com/embed/" + id,
+    aspect: options.aspect
+  });
+}
+
+module.exports = function(widgets) {
+  widgets.add("youtube/:id", render, {aspect: "sd"});
+};
+
+},{}],12:[function(_dereq_,module,exports){
 
 },{}]},{},[1])
 (1)
 });
-this["Widgets"] = this["Widgets"] || {};this["Widgets"]["templates"] = this["Widgets"]["templates"] || {};this["Widgets"]["templates"]["vimeo/vimeo"] = function(obj){
+this["Widgets"] = this["Widgets"] || {};this["Widgets"]["templates"] = this["Widgets"]["templates"] || {};this["Widgets"]["templates"]["fixed-iframe"] = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='<div class="widget-container" data-aspect-ratio="'+
@@ -259,6 +324,17 @@ __p+='<div class="widget-container" data-aspect-ratio="'+
 '">\n  <div class="widget-content">\n    <iframe src="'+
 ((__t=( src ))==null?'':_.escape(__t))+
 '" frameborder="0" width="100%" height="100%"\n      webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>\n  </div>\n</div>\n';
+}
+return __p;
+};
+this["Widgets"]["templates"]["insightmaker/insightmaker"] = function(obj){
+var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
+with(obj||{}){
+__p+='<a href="'+
+((__t=( href ))==null?'':__t)+
+'" data-lightbox="iframe">'+
+((__t=( text ))==null?'':_.escape(__t))+
+'</a>\n';
 }
 return __p;
 };
