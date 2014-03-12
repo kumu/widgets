@@ -290,14 +290,14 @@ module.exports = function(widgets) {
 // Options:
 //
 // ```
-// aspect     desired aspect ratio [sd], hd
+// aspect     desired aspect ratio [hd], sd
 // ```
 //
 // Examples:
 //
 // ```
-// Include video with id 1234 at 16x9 with autoplay
-// [[youtube/1234?aspect=16x9&autoplay=1]]
+// Include video with id 1234 in standard def with autoplay
+// [[youtube/1234?aspect=sd&autoplay=1]]
 // ```
 //
 function render(id, options) {
@@ -308,7 +308,7 @@ function render(id, options) {
 }
 
 module.exports = function(widgets) {
-  widgets.add("youtube/:id", render, {aspect: "sd"});
+  widgets.add("youtube/:id", render, {aspect: "hd"});
 };
 
 },{}],12:[function(_dereq_,module,exports){
@@ -332,7 +332,7 @@ var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments
 with(obj||{}){
 __p+='<a href="'+
 ((__t=( href ))==null?'':__t)+
-'" data-lightbox="iframe">'+
+'" target="lightbox">'+
 ((__t=( text ))==null?'':_.escape(__t))+
 '</a>\n';
 }
