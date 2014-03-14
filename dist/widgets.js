@@ -4,19 +4,31 @@ module.exports = _dereq_("./lib/index");
 },{"./lib/index":3}],2:[function(_dereq_,module,exports){
 var _ = (window._);
 var utils = _dereq_("./utils");
+var registry = _dereq_("./registry");
 
 function Context(context) {
   _.extend(this, context);
 }
 
-Context.prototype.template = function(name, values) {
-  var template = utils.template(name);
-  return template(values);
+Context.prototype.template = function(name, data) {
+  return utils.template(name, data);
 };
+
+Context.prototype.render = function(name, args) {
+  var widget = registry.get(name);
+  var options = _.last(arguments);
+  _.defaults(options, widget.defaults);
+  return widget.render.apply(this, _.rest(arguments));
+};
+
+Context.prototype.extend = _.extend;
+Context.prototype.defaults = _.defaults;
+
+// Context.prototype.redirect = function(route, options, context) {...}
 
 module.exports = Context;
 
-},{"./utils":7}],3:[function(_dereq_,module,exports){
+},{"./registry":5,"./utils":7}],3:[function(_dereq_,module,exports){
 var router = _dereq_("./router");
 var registry = _dereq_("./registry");
 var Context = _dereq_("./context");
@@ -171,17 +183,22 @@ utils.read = function(path) {
   return utils.trim(read(path, "utf8"));
 };
 
-// Returns an underscore template from the given logical path
-utils.template = function(path) {
+// Returns an underscore template from the given logical path.
+// Will render the template instead of returning it if data is given.
+utils.template = function(path, data) {
+  var template;
+
   if (typeof window == "undefined")
-    return _.template(utils.read("lib/widgets/" + path + ".jst"));
+    template = _.template(utils.read("lib/widgets/" + path + ".jst"));
   else
-    return Widgets.templates[path];
+    template = Widgets.templates[path];
+
+  return data ? template(data) : template;
 };
 
 module.exports = utils;
 
-},{"fs":12}],8:[function(_dereq_,module,exports){
+},{"fs":15}],8:[function(_dereq_,module,exports){
 //
 // // Anonymous widgets
 // module.exports = function(widgets) {
@@ -210,13 +227,39 @@ if (typeof window == "undefined") {
 } else {
   // browser build
   // TODO: automate this
+  _dereq_("./widgets/iframe/iframe")(helper);
+  _dereq_("./widgets/insightmaker/insightmaker")(helper);
+  _dereq_("./widgets/slideshare/slideshare")(helper);
+  _dereq_("./widgets/speakerdeck/speakerdeck")(helper);
   _dereq_("./widgets/vimeo/vimeo")(helper);
   _dereq_("./widgets/youtube/youtube")(helper);
-  _dereq_("./widgets/insightmaker/insightmaker")(helper);
 }
 
 
-},{"./registry":5,"./widgets/insightmaker/insightmaker":9,"./widgets/vimeo/vimeo":10,"./widgets/youtube/youtube":11,"glob":"R9Jafm"}],9:[function(_dereq_,module,exports){
+},{"./registry":5,"./widgets/iframe/iframe":9,"./widgets/insightmaker/insightmaker":10,"./widgets/slideshare/slideshare":11,"./widgets/speakerdeck/speakerdeck":12,"./widgets/vimeo/vimeo":13,"./widgets/youtube/youtube":14,"glob":"R9Jafm"}],9:[function(_dereq_,module,exports){
+//
+// Renders an iframe. Pass `aspect` option to render iframe with a fixed
+// aspect ratio.
+//
+// src      - url
+//
+// Fixed Size:
+// width    - iframe width: [100%]
+// height   - iframe height: 300
+//
+// Fixed Aspect:
+// aspect   - desired aspect ratio: sd, hd
+//
+function render(options) {
+  var template = "iframe/fixed_" + (options.aspect ? "aspect" : "size");
+  return this.template(template, options);
+}
+
+module.exports = function(widgets) {
+  widgets.register("iframe", render);
+};
+
+},{}],10:[function(_dereq_,module,exports){
 //
 // Generates Insight Maker links that'll open within the lightbox.
 //
@@ -247,7 +290,67 @@ module.exports = function(widgets) {
   widgets.add("insightmaker/:id", render);
 };
 
-},{}],10:[function(_dereq_,module,exports){
+},{}],11:[function(_dereq_,module,exports){
+//
+// The slideshare widget allows you to easily embed slideshare presentations.
+//
+// ```
+// [[slideshare/:id]]
+// ```
+//
+// Options:
+//
+// ```
+// aspect     desired aspect ratio [sd], hd
+// ```
+//
+// Examples:
+//
+// ```
+// Include presentation with id 1234 in high def
+// [[slideshare/1234?aspect=hd]]
+// ```
+//
+function render(id, options) {
+  options.src = "//www.slideshare.net/slideshow/embed_code/" + id;
+  return this.render("iframe", options);
+}
+
+module.exports = function(widgets) {
+  widgets.add("slideshare/:id", render, {aspect: "sd"});
+};
+
+},{}],12:[function(_dereq_,module,exports){
+//
+// The Speaker Deck widget allows you to easily embed presentations.
+//
+// ```
+// [[speakerdeck/:id]]
+// ```
+//
+// Options:
+//
+// ```
+// aspect     desired aspect ratio [sd], hd
+// ```
+//
+// Examples:
+//
+// ```
+// Include presentation with id 1234 in high def
+// [[speakerdeck/1234?aspect=hd]]
+// ```
+//
+function render(id, options) {
+  options.src = "//speakerdeck.com/player/" + id;
+  return this.render("iframe", options);
+}
+
+module.exports = function(widgets) {
+  widgets.add("speakerdeck/:id", render, {aspect: "sd"});
+};
+
+},{}],13:[function(_dereq_,module,exports){
 //
 // The vimeo widget allows you to easily embed videos.
 //
@@ -269,17 +372,15 @@ module.exports = function(widgets) {
 // ```
 //
 function render(id, options) {
-  return this.template("fixed-iframe", {
-    src: "//player.vimeo.com/video/" + id + "?title=0&byline=0&portrait=0",
-    aspect: options.aspect
-  });
+  options.src = "//player.vimeo.com/video/" + id + "?title=0&byline=0&portrait=0";
+  return this.render("iframe", options);
 }
 
 module.exports = function(widgets) {
   widgets.add("vimeo/:id", render, {aspect: "hd"});
 };
 
-},{}],11:[function(_dereq_,module,exports){
+},{}],14:[function(_dereq_,module,exports){
 //
 // The youtube widget allows you to easily embed videos.
 //
@@ -301,22 +402,20 @@ module.exports = function(widgets) {
 // ```
 //
 function render(id, options) {
-  return this.template("fixed-iframe", {
-    src: "//www.youtube.com/embed/" + id,
-    aspect: options.aspect
-  });
+  options.src = "//www.youtube.com/embed/" + id;
+  return this.render("iframe", options);
 }
 
 module.exports = function(widgets) {
   widgets.add("youtube/:id", render, {aspect: "hd"});
 };
 
-},{}],12:[function(_dereq_,module,exports){
+},{}],15:[function(_dereq_,module,exports){
 
 },{}]},{},[1])
 (1)
 });
-this["Widgets"] = this["Widgets"] || {};this["Widgets"]["templates"] = this["Widgets"]["templates"] || {};this["Widgets"]["templates"]["fixed-iframe"] = function(obj){
+this["Widgets"] = this["Widgets"] || {};this["Widgets"]["templates"] = this["Widgets"]["templates"] || {};this["Widgets"]["templates"]["iframe/fixed_aspect"] = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='<div class="widget-container" data-aspect-ratio="'+
@@ -324,6 +423,19 @@ __p+='<div class="widget-container" data-aspect-ratio="'+
 '">\n  <div class="widget-content">\n    <iframe src="'+
 ((__t=( src ))==null?'':_.escape(__t))+
 '" frameborder="0" width="100%" height="100%"\n      webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>\n  </div>\n</div>\n';
+}
+return __p;
+};
+this["Widgets"]["templates"]["iframe/fixed_size"] = function(obj){
+var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
+with(obj||{}){
+__p+='<iframe src="'+
+((__t=( src ))==null?'':_.escape(__t))+
+'" frameborder="0" width="'+
+((__t=( width ))==null?'':_.escape(__t))+
+'" height="'+
+((__t=( height ))==null?'':_.escape(__t))+
+'"\n  webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>\n';
 }
 return __p;
 };
@@ -335,6 +447,13 @@ __p+='<a href="'+
 '" target="lightbox">'+
 ((__t=( text ))==null?'':_.escape(__t))+
 '</a>\n';
+}
+return __p;
+};
+this["Widgets"]["templates"]["test/test"] = function(obj){
+var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
+with(obj||{}){
+__p+='Awww yeah!\n';
 }
 return __p;
 };
