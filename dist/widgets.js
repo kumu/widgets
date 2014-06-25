@@ -215,28 +215,14 @@ module.exports = utils;
 
 var helper = _dereq_("./registry").helper;
 
-if (typeof window == "undefined") {
-  // development build
-  var glob = _dereq_("glob");
-  glob("lib/widgets/**/*.js", {sync: true}, function (err, files) {
-    files.forEach(function(file) {
-      var widget = _dereq_(file.replace("lib", "."));
-      widget(helper);
-    });
-  });
-} else {
-  // browser build
-  // TODO: automate this
-  _dereq_("./widgets/iframe/iframe")(helper);
-  _dereq_("./widgets/insightmaker/insightmaker")(helper);
-  _dereq_("./widgets/slideshare/slideshare")(helper);
-  _dereq_("./widgets/speakerdeck/speakerdeck")(helper);
-  _dereq_("./widgets/vimeo/vimeo")(helper);
-  _dereq_("./widgets/youtube/youtube")(helper);
-}
+_dereq_("./widgets/iframe/iframe")(helper);
+_dereq_("./widgets/insightmaker/insightmaker")(helper);
+_dereq_("./widgets/slideshare/slideshare")(helper);
+_dereq_("./widgets/speakerdeck/speakerdeck")(helper);
+_dereq_("./widgets/vimeo/vimeo")(helper);
+_dereq_("./widgets/youtube/youtube")(helper);
 
-
-},{"./registry":5,"./widgets/iframe/iframe":9,"./widgets/insightmaker/insightmaker":10,"./widgets/slideshare/slideshare":11,"./widgets/speakerdeck/speakerdeck":12,"./widgets/vimeo/vimeo":13,"./widgets/youtube/youtube":14,"glob":"R9Jafm"}],9:[function(_dereq_,module,exports){
+},{"./registry":5,"./widgets/iframe/iframe":9,"./widgets/insightmaker/insightmaker":10,"./widgets/slideshare/slideshare":11,"./widgets/speakerdeck/speakerdeck":12,"./widgets/vimeo/vimeo":13,"./widgets/youtube/youtube":14}],9:[function(_dereq_,module,exports){
 //
 // Renders an iframe. Pass `aspect` option to render iframe with a fixed
 // aspect ratio.

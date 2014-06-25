@@ -5,8 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "qs": "*",
-    "underscore": "*",
-    "glob": "^3.2.9"
+    "underscore": "*"
   },
   "devDependencies": {
     "mocha": "~1.17.1",
