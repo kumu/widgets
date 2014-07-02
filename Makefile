@@ -1,8 +1,7 @@
-build: index templates
-	gulp compile
+build: widgets templates
 
-index:
-	browserify index.js -x glob -s Widgets > tmp/index.js
+widgets:
+	browserify index.js -x glob -s Widgets > dist/widgets.js
 
 templates:
 	gulp templates

@@ -37,16 +37,7 @@ gulp.task("templates", function(){
       processName: logicalPath,
       noRedeclare: true
     }))
-    .pipe(concat("templates.js"))
-    .pipe(gulp.dest("./tmp"));
-});
-
-gulp.task("compile", function() {
-  gulp.src(["tmp/index.js", "tmp/templates.js"])
-    .pipe(concat("widgets.js"))
-    .pipe(gulp.dest("./dist"))
-    .pipe(rename({suffix: ".min"}))
-    .pipe(uglify())
+    .pipe(concat("widgets_templates.js"))
     .pipe(gulp.dest("./dist"));
 });
 
@@ -78,4 +69,3 @@ gulp.task("default", function() {
 //     }))
 //     .pipe(gulp.dest("./tmp"));
 // });
-
