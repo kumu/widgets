@@ -33,9 +33,9 @@ gulp.task("templates", function(){
       cb();
     }))
     .pipe(declare({
+      root: "window", // "this" giving us issues on precompile
       namespace: "Widgets.templates",
-      processName: logicalPath,
-      noRedeclare: true
+      processName: logicalPath
     }))
     .pipe(concat("widgets_templates.js"))
     .pipe(gulp.dest("./dist"));

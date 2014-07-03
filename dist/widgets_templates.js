@@ -1,4 +1,6 @@
-this["Widgets"] = this["Widgets"] || {};this["Widgets"]["templates"] = this["Widgets"]["templates"] || {};this["Widgets"]["templates"]["iframe/fixed_aspect"] = function(obj){
+window["Widgets"] = window["Widgets"] || {};
+window["Widgets"]["templates"] = window["Widgets"]["templates"] || {};
+window["Widgets"]["templates"]["iframe/fixed_aspect"] = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='<div class="widget-container" data-aspect-ratio="'+
@@ -9,7 +11,9 @@ __p+='<div class="widget-container" data-aspect-ratio="'+
 }
 return __p;
 };
-this["Widgets"]["templates"]["iframe/fixed_size"] = function(obj){
+window["Widgets"] = window["Widgets"] || {};
+window["Widgets"]["templates"] = window["Widgets"]["templates"] || {};
+window["Widgets"]["templates"]["iframe/fixed_size"] = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='<iframe src="'+
@@ -22,7 +26,9 @@ __p+='<iframe src="'+
 }
 return __p;
 };
-this["Widgets"]["templates"]["insightmaker/insightmaker"] = function(obj){
+window["Widgets"] = window["Widgets"] || {};
+window["Widgets"]["templates"] = window["Widgets"]["templates"] || {};
+window["Widgets"]["templates"]["insightmaker/insightmaker"] = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='<a href="'+
@@ -33,7 +39,9 @@ __p+='<a href="'+
 }
 return __p;
 };
-this["Widgets"]["templates"]["test/test"] = function(obj){
+window["Widgets"] = window["Widgets"] || {};
+window["Widgets"]["templates"] = window["Widgets"]["templates"] || {};
+window["Widgets"]["templates"]["test/test"] = function(obj){
 var __t,__p='',__j=Array.prototype.join,print=function(){__p+=__j.call(arguments,'');};
 with(obj||{}){
 __p+='Awww yeah!\n';
