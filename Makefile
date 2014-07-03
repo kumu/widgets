@@ -1,10 +1,7 @@
-build: widgets templates
-
-widgets:
-	browserify index.js -x glob -s Widgets > dist/widgets.js
-
-templates:
+build:
+	browserify index.js -x glob -s Widgets > tmp/index.js
 	gulp templates
+	gulp concat
 
 lint:
 	gulp lint

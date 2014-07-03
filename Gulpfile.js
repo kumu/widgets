@@ -5,13 +5,10 @@ var concat = require("gulp-concat");
 var uglify = require("gulp-uglify");
 var rename = require("gulp-rename");
 var declare = require("gulp-declare");
+var insert = require("gulp-insert");
 var through = require("through2");
 
 var widgetRoot = process.cwd() + "/lib/widgets/";
-
-function logicalPath(path) {
-  return path.replace(widgetRoot, "").replace(".jst", "");
-}
 
 gulp.task("lint", function() {
   gulp.src(["./lib/**/*.js"])
@@ -19,8 +16,18 @@ gulp.task("lint", function() {
     .pipe(jshint.reporter());
 });
 
-// TODO: Need to use logical path to template instead of just basename
+// There is some serious voodoo going on with this one.
+//
+// The output needs to be wrapped in a self-executing function or we run
+// into "unexpected token" errors during `rake assets:precompile`
+//
+// We also need to include a statement outside of the function or we run
+// into "Uncaught object" errors during development.
 gulp.task("templates", function(){
+  function logicalPath(path) {
+    return path.replace(widgetRoot, "").replace(".jst", "");
+  }
+
   gulp.src("lib/**/*.jst")
     .pipe(through.obj(function (file, enc, cb) {
       try {
@@ -33,11 +40,17 @@ gulp.task("templates", function(){
       cb();
     }))
     .pipe(declare({
-      root: "window", // "this" giving us issues on precompile
       namespace: "Widgets.templates",
       processName: logicalPath
     }))
-    .pipe(concat("widgets_templates.js"))
+    .pipe(concat("templates.js"))
+    .pipe(insert.wrap("(function() {\n", "\n}).call(this);\n"))
+    .pipe(gulp.dest("./tmp"));
+});
+
+gulp.task("concat", function() {
+  gulp.src(["tmp/index.js", "tmp/templates.js"])
+    .pipe(concat("widgets.js"))
     .pipe(gulp.dest("./dist"));
 });
 
