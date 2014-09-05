@@ -1,10 +1,11 @@
-!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Widgets=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
-module.exports = _dereq_("./lib/index");
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Widgets=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+module.exports = require("./lib/index");
 
-},{"./lib/index":3}],2:[function(_dereq_,module,exports){
-var _ = (window._);
-var utils = _dereq_("./utils");
-var registry = _dereq_("./registry");
+},{"./lib/index":3}],2:[function(require,module,exports){
+(function (global){
+var _ = (typeof window !== "undefined" ? window._ : typeof global !== "undefined" ? global._ : null);
+var utils = require("./utils");
+var registry = require("./registry");
 
 function Context(context) {
   _.extend(this, context);
@@ -28,12 +29,13 @@ Context.prototype.defaults = _.defaults;
 
 module.exports = Context;
 
-},{"./registry":5,"./utils":7}],3:[function(_dereq_,module,exports){
-var router = _dereq_("./router");
-var registry = _dereq_("./registry");
-var Context = _dereq_("./context");
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./registry":5,"./utils":7}],3:[function(require,module,exports){
+var router = require("./router");
+var registry = require("./registry");
+var Context = require("./context");
 
-_dereq_("./widgets");
+require("./widgets");
 
 function render(route, options, contextExtensions) {
   var context = new Context(contextExtensions);
@@ -46,10 +48,11 @@ function get(name) {
 
 module.exports = {render: render, get: get};
 
-},{"./context":2,"./registry":5,"./router":6,"./widgets":8}],4:[function(_dereq_,module,exports){
+},{"./context":2,"./registry":5,"./router":6,"./widgets":8}],4:[function(require,module,exports){
+(function (global){
 // Simple uri-based callback router based on Backbone.Router / History
-var _ = (window._);
-var qs = (window.qs);
+var _ = (typeof window !== "undefined" ? window._ : typeof global !== "undefined" ? global._ : null);
+var qs = (typeof window !== "undefined" ? window.qs : typeof global !== "undefined" ? global.qs : null);
 
 var optionalParam = /\((.*?)\)/g;
 var namedParam    = /(\(\?)?:\w+/g;
@@ -117,9 +120,10 @@ function regexify(route) {
 
 module.exports = Paperboy;
 
-},{}],5:[function(_dereq_,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],5:[function(require,module,exports){
 var registry = {};
-var router = _dereq_("./router");
+var router = require("./router");
 
 // Named widget
 function register(name, render, defaults) {
@@ -153,9 +157,10 @@ var helper = {
 
 module.exports = {helper: helper, register: register, get: get};
 
-},{"./router":6}],6:[function(_dereq_,module,exports){
-var _ = (window._);
-var Paperboy = _dereq_("./paperboy");
+},{"./router":6}],6:[function(require,module,exports){
+(function (global){
+var _ = (typeof window !== "undefined" ? window._ : typeof global !== "undefined" ? global._ : null);
+var Paperboy = require("./paperboy");
 var router = new Paperboy();
 
 function add(route, render, defaults) {
@@ -168,9 +173,11 @@ function call(path, options, context) {
 
 module.exports = {add: add, call: call};
 
-},{"./paperboy":4}],7:[function(_dereq_,module,exports){
-var read = _dereq_("fs").readFileSync;
-var _ = (window._);
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./paperboy":4}],7:[function(require,module,exports){
+(function (global){
+var read = require("fs").readFileSync;
+var _ = (typeof window !== "undefined" ? window._ : typeof global !== "undefined" ? global._ : null);
 var utils = {};
 
 utils.trim = function(string) {
@@ -198,7 +205,8 @@ utils.template = function(path, data) {
 
 module.exports = utils;
 
-},{"fs":15}],8:[function(_dereq_,module,exports){
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"fs":15}],8:[function(require,module,exports){
 //
 // // Anonymous widgets
 // module.exports = function(widgets) {
@@ -213,16 +221,16 @@ module.exports = utils;
 //     .route("vimeo/:id/hd", {aspect: "hd"});
 // };
 
-var helper = _dereq_("./registry").helper;
+var helper = require("./registry").helper;
 
-_dereq_("./widgets/iframe/iframe")(helper);
-_dereq_("./widgets/insightmaker/insightmaker")(helper);
-_dereq_("./widgets/slideshare/slideshare")(helper);
-_dereq_("./widgets/speakerdeck/speakerdeck")(helper);
-_dereq_("./widgets/vimeo/vimeo")(helper);
-_dereq_("./widgets/youtube/youtube")(helper);
+require("./widgets/iframe/iframe")(helper);
+require("./widgets/insightmaker/insightmaker")(helper);
+require("./widgets/slideshare/slideshare")(helper);
+require("./widgets/speakerdeck/speakerdeck")(helper);
+require("./widgets/vimeo/vimeo")(helper);
+require("./widgets/youtube/youtube")(helper);
 
-},{"./registry":5,"./widgets/iframe/iframe":9,"./widgets/insightmaker/insightmaker":10,"./widgets/slideshare/slideshare":11,"./widgets/speakerdeck/speakerdeck":12,"./widgets/vimeo/vimeo":13,"./widgets/youtube/youtube":14}],9:[function(_dereq_,module,exports){
+},{"./registry":5,"./widgets/iframe/iframe":9,"./widgets/insightmaker/insightmaker":10,"./widgets/slideshare/slideshare":11,"./widgets/speakerdeck/speakerdeck":12,"./widgets/vimeo/vimeo":13,"./widgets/youtube/youtube":14}],9:[function(require,module,exports){
 //
 // Renders an iframe. Pass `aspect` option to render iframe with a fixed
 // aspect ratio.
@@ -245,7 +253,7 @@ module.exports = function(widgets) {
   widgets.register("iframe", render);
 };
 
-},{}],10:[function(_dereq_,module,exports){
+},{}],10:[function(require,module,exports){
 //
 // Generates Insight Maker links that'll open within the lightbox.
 //
@@ -276,7 +284,7 @@ module.exports = function(widgets) {
   widgets.add("insightmaker/:id", render);
 };
 
-},{}],11:[function(_dereq_,module,exports){
+},{}],11:[function(require,module,exports){
 //
 // The slideshare widget allows you to easily embed slideshare presentations.
 //
@@ -306,7 +314,7 @@ module.exports = function(widgets) {
   widgets.add("slideshare/:id", render, {aspect: "sd"});
 };
 
-},{}],12:[function(_dereq_,module,exports){
+},{}],12:[function(require,module,exports){
 //
 // The Speaker Deck widget allows you to easily embed presentations.
 //
@@ -336,7 +344,7 @@ module.exports = function(widgets) {
   widgets.add("speakerdeck/:id", render, {aspect: "sd"});
 };
 
-},{}],13:[function(_dereq_,module,exports){
+},{}],13:[function(require,module,exports){
 //
 // The vimeo widget allows you to easily embed videos.
 //
@@ -358,7 +366,11 @@ module.exports = function(widgets) {
 // ```
 //
 function render(id, options) {
-  options.src = "//player.vimeo.com/video/" + id + "?title=0&byline=0&portrait=0";
+  options.src = "//player.vimeo.com/video/" + id;
+  options.src += "?title=0&byline=0&portrait=0";
+
+  if (options.autoplay) options.src += "&autoplay=1";
+
   return this.render("iframe", options);
 }
 
@@ -366,7 +378,7 @@ module.exports = function(widgets) {
   widgets.add("vimeo/:id", render, {aspect: "hd"});
 };
 
-},{}],14:[function(_dereq_,module,exports){
+},{}],14:[function(require,module,exports){
 //
 // The youtube widget allows you to easily embed videos.
 //
@@ -389,6 +401,9 @@ module.exports = function(widgets) {
 //
 function render(id, options) {
   options.src = "//www.youtube.com/embed/" + id;
+
+  if (options.autoplay) options.src += "?autoplay=1";
+
   return this.render("iframe", options);
 }
 
@@ -396,10 +411,9 @@ module.exports = function(widgets) {
   widgets.add("youtube/:id", render, {aspect: "hd"});
 };
 
-},{}],15:[function(_dereq_,module,exports){
+},{}],15:[function(require,module,exports){
 
-},{}]},{},[1])
-(1)
+},{}]},{},[1])(1)
 });
 (function() {
 this["Widgets"] = this["Widgets"] || {};
